@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🏠 House Price Prediction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* Extra styling for search bar */
+    .search-box {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .search-box input {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <header class="site-header">
+    <div class="logo">🏠</div>
+    <h1>House Price Prediction</h1>
+    <p class="tagline">Enter property details and get an instant estimate</p>
+  </header>
+
+  <main class="wrapper">
+    <section class="card grid">
+      <form action="{{ url_for('predict') }}" method="POST" class="form">
+        <h2>Property Details</h2>
+
+        <div class="grid-2">
+          <label><span>Area (sq ft)</span><input type="number" name="area" required></label>
+          <label><span>Bedrooms</span><input type="number" name="bedrooms" required></label>
+          <label><span>Bathrooms</span><input type="number" name="bathrooms" required></label>
+          <label><span>Stories</span><input type="number" name="stories" required></label>
+          <label><span>Parking</span><input type="number" name="parking" required></label>
+
+          <label>
+            <span>Furnishing</span>
+            <select name="furnishingstatus" required>
+              <option value="furnished">Furnished</option>
+              <option value="semi-furnished">Semi-Furnished</option>
+              <option value="unfurnished">Unfurnished</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Location</span>
+            <div class="search-box">
+              <input type="text" id="searchLocation" placeholder="Search location...">
+              <select name="location" id="locationSelect" size="8" required>
+                {% for loc in locations %}
+                  <option value="{{ loc }}">{{ loc }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </label>
+        </div>
+
+        <div class="toggles">
+          <label><input type="checkbox" name="guestroom" value="yes"> Guest Room</label>
+          <label><input type="checkbox" name="basement" value="yes"> Basement</label>
+          <label><input type="checkbox" name="hotwaterheating" value="yes"> Hot Water Heating</label>
+          <label><input type="checkbox" name="airconditioning" value="yes"> Air Conditioning</label>
+          <label><input type="checkbox" name="prefarea" value="yes"> Preferred Area</label>
+          <label><input type="radio" name="mainroad" value="yes" checked> On Main Road</label>
+          <label><input type="radio" name="mainroad" value="no"> Not Main Road</label>
+        </div>
+
+        <button type="submit" class="btn-primary">Predict Price</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // JS for filtering locations
+    const searchInput = document.getElementById("searchLocation");
+    const locationSelect = document.getElementById("locationSelect");
+
+    searchInput.addEventListener("keyup", function() {
+      let filter = searchInput.value.toLowerCase();
+      let options = locationSelect.options;
+
+      for (let i = 0; i < options.length; i++) {
+        let txt = options[i].text.toLowerCase();
+        options[i].style.display = txt.includes(filter) ? "" : "none";
+      }
+    });
+  </script>
+</body>
+</html>

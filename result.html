@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prediction Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="bg"></div>
+  <main class="wrapper">
+    <section class="card result-card">
+      {% if error %}
+        <h2>Something went wrong 🛠️</h2>
+        <p class="error">{{ error }}</p>
+      {% else %}
+        <h2>Your Estimated Price</h2>
+        <div class="price-card">
+          <div class="price">₹ {{ "{:,.2f}".format(price) }}</div>
+          <div class="sub">Adjusted with Location multiplier (× {{ multiplier }})</div>
+          <p class="muted">Base model estimate: ₹ {{ "{:,.2f}".format(base_price) }}</p>
+        </div>
+
+        <div class="details">
+          <h3>Input Details</h3>
+          <ul class="kv">
+            {% for k, v in details.items() %}
+              <li><span>{{ k }}</span><strong>{{ v }}</strong></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <div class="actions">
+        <a href="{{ url_for('index') }}" class="btn-secondary">← Predict Another</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
